@@ -3,4 +3,5 @@ project(JPMahjongSimulator)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(JPMahjongSimulator main.cpp PlayerResources.h CommonHeaders.h)
+add_executable(JPMahjongSimulator main.cpp  CommonHeaders.h
+            PlayerResources.h  PlayResources.cpp Round.h Round.cpp)
