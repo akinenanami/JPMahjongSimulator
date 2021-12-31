@@ -8,11 +8,11 @@
 #include <bits/stdc++.h>
 
 enum class Operation {
-    DRAW = 0,           //摸
-    BON,                //碰
-    CHI,                //吃
-    GAN,                //杠
-    RON                 //荣和
+    DRAW = 0,    //摸
+    BON,         //碰
+    CHI,         //吃
+    GAN,         //杠
+    RON          //荣和
 };
 
 #endif    //JPMAHJONGSIMULATOR_COMMONHEADERS_H

@@ -4,11 +4,11 @@
 
 #include "PlayerResources.h"
 
-
-
-void mahjongSort(std::vector<uint8_t> & cards) {
+void mahjongSort(std::vector<uint8_t> &cards)
+{
     struct mps_cmp {
-        bool operator()(uint8_t a, uint8_t b) {
+        bool operator()(uint8_t a, uint8_t b)
+        {
             if ((a % 30) < (b % 30)) return true;
             else if (((a % 30) == (b % 30)) && (a < b)) return true;
             else return false;
@@ -16,12 +16,13 @@ void mahjongSort(std::vector<uint8_t> & cards) {
     };
 
     struct word_cmp {
-        bool operator()(uint8_t a, uint8_t b) {
+        bool operator()(uint8_t a, uint8_t b)
+        {
             return (a % 10) < (b % 10);
         }
     };
 
-    int l = 0, r = cards.size() - 1;
+    int     l = 0, r = cards.size() - 1;
     uint8_t exchange;
     while (l != r + 1)
         if (cards[l] >= 120) {
@@ -29,18 +30,18 @@ void mahjongSort(std::vector<uint8_t> & cards) {
             cards[l] = cards[r];
             cards[r] = exchange;
             r -= 1;
-        }
-        else l++;
+        } else l++;
     std::sort(cards.begin(), cards.begin() + l, mps_cmp());
     std::sort(cards.begin() + l, cards.end(), word_cmp());
 }
 
-uint32_t winTypeExchange(std::vector<uint8_t> & cards) {
+uint32_t winTypeExchange(std::vector<uint8_t> &cards)
+{
     mahjongSort(cards);
 
     //由牌型变换为编码字符串
     std::vector<uint8_t> str_type;
-    int curr = 1, count = 1;
+    int                  curr = 1, count = 1;
     //对于非字牌部分
     while (curr < cards.size() && cards[curr] < 120) {
         if (cards[curr - 1] % 30 == cards[curr] % 30)
@@ -76,24 +77,24 @@ uint32_t winTypeExchange(std::vector<uint8_t> & cards) {
 
     //由编码字符串变换为int编码
     uint32_t code = 0;
-    int i = 0, to_be_coded, bitsnum;
+    int      i    = 0, to_be_coded, bitsnum;
     while (i < str_type.size()) {
         switch (str_type[i]) {
             case 1:
                 to_be_coded = 0;
-                bitsnum = 0;
+                bitsnum     = 0;
                 break;
             case 2:
                 to_be_coded = 3;
-                bitsnum = 2;
+                bitsnum     = 2;
                 break;
             case 3:
                 to_be_coded = 15;
-                bitsnum = 4;
+                bitsnum     = 4;
                 break;
             case 4:
                 to_be_coded = 63;
-                bitsnum = 6;
+                bitsnum     = 6;
         }
         code = code << bitsnum;
         code += to_be_coded;
@@ -101,8 +102,7 @@ uint32_t winTypeExchange(std::vector<uint8_t> & cards) {
             code = code << 2;
             code += 2;
             i += 2;
-        }
-        else {
+        } else {
             code = code << 1;
             i += 1;
         }
@@ -111,6 +111,6 @@ uint32_t winTypeExchange(std::vector<uint8_t> & cards) {
     return code;
 }
 
-std::unordered_set<int> winCombinationSetConstruct() {
-
+std::unordered_set<int> winCombinationSetConstruct()
+{
 }
