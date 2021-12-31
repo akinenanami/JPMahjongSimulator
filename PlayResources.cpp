@@ -35,7 +35,7 @@ void mahjongSort(std::vector<uint8_t> & cards) {
     std::sort(cards.begin() + l, cards.end(), word_cmp());
 }
 
-int winTypeExchange(std::vector<uint8_t> & cards) {
+uint32_t winTypeExchange(std::vector<uint8_t> & cards) {
     mahjongSort(cards);
 
     //由牌型变换为编码字符串
@@ -111,6 +111,6 @@ int winTypeExchange(std::vector<uint8_t> & cards) {
     return code;
 }
 
-std::unordered_set<int> winCombinationSetConstruct(){
+std::unordered_set<int> winCombinationSetConstruct() {
 
 }
