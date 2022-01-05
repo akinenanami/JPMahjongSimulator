@@ -4,20 +4,6 @@
 
 #include "PlayerResources.h"
 
-std::vector<std::vector<int>> combinationEnumeration(std::vector<int> nums) {
-    int n = nums.size(), i, j, k;
-    std::vector<std::vector<int>> result((int)pow(2, n), std::vector<int>());
-    for (i = 0; i < pow(2, n); i++) {
-        k = 1;
-        for (j = 0; j < n; j++) {
-            if ((k & i) == k)
-                result[i].push_back(nums[j]);
-            k = k << 1;
-        }
-    }
-    return result;
-}
-
 void mahjongSort(std::vector<uint8_t> & cards) {
     struct mps_cmp {
         bool operator()(uint8_t a, uint8_t b) {
@@ -126,6 +112,19 @@ int winCodeExchange(std::vector<uint8_t> str_type) {
     return code;
 }
 
+std::vector<std::vector<int>> combinationEnumeration(std::vector<int> nums) {
+    int n = nums.size(), i, j, k;
+    std::vector<std::vector<int>> result((int)pow(2, n), std::vector<int>());
+    for (i = 0; i < pow(2, n); i++) {
+        k = 1;
+        for (j = 0; j < n; j++) {
+            if ((k & i) == k)
+                result[i].push_back(nums[j]);
+            k = k << 1;
+        }
+    }
+    return result;
+}
 
 std::unordered_set<int> winCodeSetConstruct() {
     int triplet;                  //刻子的个数

@@ -14,7 +14,7 @@
  AlignConsecutiveMacros                         : AcrossEmptyLinesAndComments
  AlignEscapedNewlines                           : Right
  AlignOperands                                  : Align
- AlignTrailingComments                          : false
+ AlignTrailingComments                          : true
  AllowAllArgumentsOnNextLine                    : false
  AllowAllConstructorInitializersOnNextLine      : false
  AllowAllParametersOfDeclarationOnNextLine      : false
