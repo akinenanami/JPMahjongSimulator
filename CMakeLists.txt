@@ -3,4 +3,4 @@ PROJECT(JPMahjongSimulator)
 
 SET(CMAKE_CXX_STANDARD 17)
 
-ADD_EXECUTABLE(JPMahjongSimulator main.cpp CommonHeaders.h PlayerResources.h PlayResources.cpp Round.h Round.cpp)
+ADD_EXECUTABLE(JPMahjongSimulator main.cpp CommonHeaders.h PlayerResources.h PlayResources.cpp Round.h Round.cpp Judge.cpp Judge.h)

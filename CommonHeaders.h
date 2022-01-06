@@ -11,7 +11,7 @@ enum class Operation {
     DRAW = 0,    //摸
     BON,         //碰
     CHI,         //吃
-    GAN,         //杠
+    KAN,         //杠
     RON          //荣和
 };
 
