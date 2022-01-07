@@ -7,22 +7,11 @@
 
 #include "CommonHeaders.h"
 
-struct Exposure {                   //副露面子
-    std::vector<uint8_t> cards;
-    int resonance_card;             //鸣牌获得的牌
-    int card_from;                  //鸣牌来源
-    Exposure(std::vector<uint8_t> cards, int resonance_card, int card_from) {
-        this->cards = cards;
-        this->resonance_card = resonance_card;
-        this->card_from = card_from;
-    }
-};
-
 class PlayResource {
 public:
     std::vector<Exposure>       exposures;         //副露
     std::unordered_set<uint8_t> discards_river;    //牌河
-    uint8_t                     wind;              //门风
+    uint8_t                     menfon;              //门风
     uint32_t                    score;             //分数
     uint8_t                     riichi;            //立直状态，0未立直，1立直，2两立直
 
@@ -45,7 +34,7 @@ class Player: PlayResource {
 class Board {
 public:
     std::vector<uint8_t> dorasigns;        //所有宝牌指示牌
-    uint8_t              wind;             //场风
+    uint8_t              chanfon;             //场风
     int                  heap_pointer;     //牌山指针，指向下一张待摸取的牌
     int                  ridge_pointer;    //岭上指针，指向下一张待摸取的岭上牌
     int                  dora_pointer;     //宝牌指针，指向下一张待翻开的宝牌

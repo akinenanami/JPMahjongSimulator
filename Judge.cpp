@@ -236,22 +236,35 @@ void Judge::winCodeSetConstruct() {
 }
 
 std::vector<std::vector<std::vector<uint8_t>>> Judge::handDivision(std::vector<uint8_t> hand, int exposure_size) {
-    //最外层的vector代表各分配方案，每个分配方案的第一个vector<int>为刻子数、顺子数，后面为雀头、刻子、顺子
+    //将手牌hashmap化
+    std::vector<uint8_t> hand_division(37, 0);
+    for (uint8_t card : hand) {
+        if (card < 120)
+            hand_division[card % 30] += 1;
+        else
+            hand_division[30 + card % 10] += 1;
+    }
+
+    //result最外层的vector代表各分配方案，每个分配方案要求：{{刻子数, 顺子数}, {雀头}, {刻子1}, ..., {顺子1}, ...}
     std::vector<std::vector<std::vector<uint8_t>>> result;
-    std::vector<uint8_t> pairs = findPairs(hand);
+    std::vector<uint8_t> pairs = findPairs(hand_division);
 
+    //对于每个可能的雀头
     for (uint8_t pair : pairs) {
-        std::vector<uint8_t> hand_without_pair = hand;
+        std::vector<uint8_t> hand_without_pair = hand_division;
         hand_without_pair[pair] -= 2;
-        std::vector<uint8_t> triplets = findTriplets(hand_without_pair);
 
+        //对于当前情况下找到可能的所有刻子组合
+        std::vector<uint8_t> triplets = findTriplets(hand_without_pair);
         std::vector<std::vector<uint8_t>> combinations = combinationEnumeration<uint8_t>(triplets);
 
+        //对于每种刻子组合
         for (std::vector<uint8_t> combination : combinations) {
             std::vector<uint8_t> hand_without_pair_or_triplet = hand_without_pair;
             for (uint8_t triplet : combination)
                 hand_without_pair_or_triplet[triplet] -= 3;
 
+            //找到所有顺子并判断是否符号胡牌条件，如果符合，按照要求构造并加入result
             std::vector<std::vector<uint8_t>> sequences = findSequences(hand_without_pair_or_triplet);
             if ((sequences.size() + combination.size()) == (4 - exposure_size)) {
                 std::vector<std::vector<uint8_t>> result_n{{(uint8_t)combination.size(), (uint8_t)sequences.size()}};
