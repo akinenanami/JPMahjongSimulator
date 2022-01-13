@@ -65,11 +65,13 @@ enum class Operation {
 struct Exposure {                   //副露面子
     std::vector<uint8_t> cards;
     int resonance_card;             //鸣牌获得的牌
-    int card_from;                  //鸣牌来源
-    Exposure(std::vector<uint8_t> cards, int resonance_card, int card_from) {
+    int card_from;                  //鸣牌来源, 0为自家, 1为下家, 2为对家, 3为上家
+    int type;                       //面子类型，0为刻子，1为顺子
+    Exposure(std::vector<uint8_t> cards, int resonance_card, int card_from, int type) {
         this->cards = cards;
         this->resonance_card = resonance_card;
         this->card_from = card_from;
+        this->type = type;
     }
 };
 

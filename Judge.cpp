@@ -280,3 +280,572 @@ std::vector<std::vector<std::vector<uint8_t>>> Judge::handDivision(std::vector<u
     return result;
 }
 
+bool YakuJudge::tanyaoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i, j;
+    uint8_t curr;
+    for (i = 1; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size(); j++) {
+            curr = hand_divided[i][j];
+            if ((curr % 10 == 1) || (curr % 10 == 9) || (curr >= 30))
+                return false;
+        }
+    for (i = 0; i < exposures.size(); i++)
+        for (j = 0; j < exposures[i].cards.size(); j++) {
+            curr = (exposures[i].cards[j] < 120) ? (exposures[i].cards[j] % 30) : (exposures[i].cards[j] % 10 + 30);
+            if ((curr % 10 == 1) || (curr % 10 == 9) || (curr >= 30))
+                return false;
+        }
+    return true;
+}
+
+bool YakuJudge::menfonJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures, uint8_t menfon) {
+    int i;
+    for (i = 2; i < hand_divided.size(); i++) {
+        if ((hand_divided[i][0] >= 30) && (hand_divided[i][0] == menfon))
+            return true;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards[0] >= 120) && ((exposures[i].cards[0] % 10) == (menfon % 10)))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::chanfonJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures, uint8_t chanfon) {
+    int i;
+    for (i = 2; i < hand_divided.size(); i++) {
+        if (hand_divided[i][0] == chanfon)
+            return true;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards[0] >= 120) && ((exposures[i].cards[0] % 10) == (chanfon % 10)))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::hakuJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    for (i = 2; i < hand_divided.size(); i++) {
+        if (hand_divided[i][0] == 34)
+            return true;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards[0] >= 120) && ((exposures[i].cards[0] % 10) == 4))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::hatsuJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    for (i = 2; i < hand_divided.size(); i++) {
+        if (hand_divided[i][0] == 35)
+            return true;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards[0] >= 120) && ((exposures[i].cards[0] % 10) == 5))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::tyunJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    for (i = 2; i < hand_divided.size(); i++) {
+        if (hand_divided[i][0] == 36)
+            return true;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards[0] >= 120) && ((exposures[i].cards[0] % 10) == 6))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::pinhuJudge(std::vector<std::vector<uint8_t>> hand_divided, uint8_t chanfon, uint8_t menfon, uint8_t _card) {
+    if (hand_divided[0][1] != 4)
+        return false;
+    if ((hand_divided[1][0] == chanfon) || (hand_divided[1][0] == menfon) || (hand_divided[1][0] >= 34))
+        return false;
+    _card = _card % 30;
+    for (int i = hand_divided[0][0] + 2; i < hand_divided.size(); i++) {
+        if ((hand_divided[i][0] == _card) || (hand_divided[i][2] == _card))
+            return true;
+    }
+    return false;
+}
+
+bool YakuJudge::ipekoJudge(std::vector<std::vector<uint8_t>> hand_divided) {
+    for (int i = 2; i < hand_divided.size(); i++) {
+        for (int j = i + 1; j < hand_divided.size(); j++) {
+            if (hand_divided[i] == hand_divided[j])
+                return true;
+        }
+    }
+    return false;
+}
+
+bool YakuJudge::sansyokudoujunJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i, j, k;
+    for (auto exposure : exposures) {
+        if (exposure.type == 1) {
+            for (i = 0; i < 3; i++)
+                exposure.cards[i] = exposure.cards[i] % 30;
+            hand_divided.push_back(exposure.cards);
+        }
+    }
+    for (i = (hand_divided[0][0] + 2); i < hand_divided.size(); i++)
+        for (j = i + 1; j < hand_divided.size(); j++)
+            for (k = j + 1; k < hand_divided.size(); k++) {
+                std::vector<uint8_t> tmp{hand_divided[i][0], hand_divided[j][0], hand_divided[k][0]};
+                sort(tmp.begin(), tmp.end(), std::less<uint8_t>());
+                if ((tmp[1] - tmp[0] == 10) && (tmp[2] - tmp[1] == 10))
+                    return true;
+            }
+    return false;
+}
+
+bool YakuJudge::sansyokudoukoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i, j, k;
+    std::vector<std::vector<uint8_t>> triplets;
+    for (i = 2; i < 2 + hand_divided[0][0]; i++)
+        triplets.push_back(hand_divided[i]);
+    for (auto exposure : exposures) {
+        if (exposure.type == 0)
+            if (exposure.cards[0] < 120) {
+                for (i = 0; i < 3; i++)
+                    exposure.cards[i] = exposure.cards[i] % 30;
+                triplets.push_back(exposure.cards);
+            }
+    }
+    for (i = 0; i < triplets.size(); i++)
+        for (j = i + 1; j < triplets.size(); j++)
+            for (k = j + 1; k < triplets.size(); k++) {
+                std::vector<uint8_t> tmp{triplets[i][0], triplets[j][0], triplets[k][0]};
+                sort(tmp.begin(), tmp.end(), std::less<uint8_t>());
+                if ((tmp[1] - tmp[0] == 10) && (tmp[2] - tmp[1] == 10))
+                    return true;
+            }
+    return false;
+}
+
+bool YakuJudge::sankantsuJudge(std::vector<Exposure> & exposures) {
+    int count = 0, i;
+    for (i = 0; i < exposures.size(); i++) {
+        if (exposures[i].cards.size() == 4)
+            count += 1;
+    }
+    return count == 3;
+}
+
+bool YakuJudge::toitoiJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int count = hand_divided[0][0], i;
+    for (i = 0; i < exposures.size(); i++) {
+        if (exposures[i].type == 0)
+            count += 1;
+    }
+    return count == 4;
+}
+
+bool YakuJudge::sanankoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures, uint8_t _card, int card_from) {
+    int count = 0, i;
+    _card = (_card >= 120) ? (30 + _card % 10) : (_card % 30);
+    for (i = 2; i < 2 + hand_divided[0][0]; i++) {
+        if ((card_from == 0) || (hand_divided[i][0] != _card))
+            count += 1;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards.size() == 4) && (exposures[i].card_from == 0))
+            count += 1;
+    }
+    return count == 3;
+}
+
+bool YakuJudge::syosangenJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int count = 0, i;
+    if (hand_divided[1][0] >= 34)
+        count += 1;
+    else return false;
+    for (i = 2; i < hand_divided[0][0] + 2; i++) {
+        if (hand_divided[i][0] >= 34)
+            count += 1;
+    }
+    for (auto exposure : exposures) {
+        if (exposure.cards[0] >= 164)
+            count += 1;
+    }
+    return count == 3;
+}
+
+bool YakuJudge::honrotoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int count = hand_divided[0][0], i;
+    for (i = 0; i < exposures.size(); i++) {
+        if (exposures[i].type == 0)
+            count += 1;
+    }
+    if (count != 4)
+        return false;
+    for (i = 1; i < hand_divided.size(); i++) {
+        if ((hand_divided[i][0] < 30) && (hand_divided[i][0] % 10 != 1) && (hand_divided[i][0] % 10 != 9))
+            return false;
+    }
+    for (auto exposure : exposures) {
+        if ((exposure.cards[0] < 120) && (exposure.cards[0] % 10 != 1) && (exposure.cards[0] % 10 != 9))
+            return false;
+    }
+    return true;
+}
+
+bool YakuJudge::ittsuJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i, j, k;
+    for (auto exposure : exposures) {
+        if (exposure.type == 1) {
+            for (i = 0; i < 3; i++)
+                exposure.cards[i] = exposure.cards[i] % 30;
+            hand_divided.push_back(exposure.cards);
+        }
+    }
+    for (i = (hand_divided[0][0] + 2); i < hand_divided.size(); i++)
+        for (j = i + 1; j < hand_divided.size(); j++)
+            for (k = j + 1; k < hand_divided.size(); k++) {
+                std::vector<uint8_t> tmp{hand_divided[i][0], hand_divided[j][0], hand_divided[k][0]};
+                sort(tmp.begin(), tmp.end(), std::less<uint8_t>());
+                if ((tmp[0] % 10 == 1) && (tmp[1] - tmp[0] == 3) && (tmp[2] - tmp[1] == 3))
+                    return true;
+            }
+    return false;
+}
+
+bool YakuJudge::chantaJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    bool sign;
+    int count = hand_divided[0][1];
+    for (i = 1; i < hand_divided.size(); i++) {
+        sign = false;
+        for (uint8_t card : hand_divided[i])
+            if ((card % 10 == 1) || (card % 10 == 9) || (card >= 30))
+                sign = true;
+        if (!sign)
+            return false;
+    }
+    for (auto exposure : exposures) {
+        if (exposure.type == 1) count += 1;
+        sign = false;
+        for (uint8_t card : exposure.cards)
+            if ((card % 10 == 1) || (card % 10 == 9) || (card >= 120))
+                sign = true;
+        if (!sign)
+            return false;
+    }
+    if (count == 0)
+        return false;
+    return true;
+}
+
+bool YakuJudge::junchanJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    bool sign;
+    int count = hand_divided[0][1];
+    for (i = 1; i < hand_divided.size(); i++) {
+        sign = false;
+        for (uint8_t card : hand_divided[i])
+            if (((card % 10 == 1) || (card % 10 == 9)) && (card < 30))
+                sign = true;
+        if (!sign)
+            return false;
+    }
+    for (auto exposure : exposures) {
+        if (exposure.type == 1) count += 1;
+        sign = false;
+        for (uint8_t card : exposure.cards)
+            if (((card % 10 == 1) || (card % 10 == 9)) && (card < 120))
+                sign = true;
+        if (!sign)
+            return false;
+    }
+    if (count == 0)
+        return false;
+    return true;
+}
+
+bool YakuJudge::ryanpekoJudge(std::vector<std::vector<uint8_t>> hand_divided) {
+    int i, j, k, count = 0;
+    if (hand_divided[0][1] != 4)
+        return false;
+    for (i = 2; i < hand_divided.size(); i++) {
+        for (j = i + 1; j < hand_divided.size(); j++) {
+            if (hand_divided[i] == hand_divided[j]) {
+                std::vector<int> tmp;
+                for (k = 2; k < 6; k++)
+                    if ((k != i) && (k != j))
+                        tmp.push_back(k);
+                if (hand_divided[tmp[0]] == hand_divided[tmp[1]])
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool YakuJudge::honitsuJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int cardmap[37]{0}, i, j;
+    for (i = 1; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size(); j++)
+            cardmap[hand_divided[i][j]] += 1;
+    for (i = 0; i < exposures.size(); i++)
+        for (j = 0; j < exposures[i].cards.size(); j++)
+            if (exposures[i].cards[j] >= 120)
+                cardmap[30 + exposures[i].cards[j] % 10] += 1;
+            else
+                cardmap[exposures[i].cards[j] % 30] += 1;
+    j = 0;
+    for (i = 0; i < 10; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    for (i = 10; i < 20; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    for (i = 20; i < 30; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    if (j == 1) return true;
+    return false;
+}
+
+bool YakuJudge::chinitsuJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int cardmap[37]{0}, i, j;
+    for (i = 1; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size(); j++)
+            cardmap[hand_divided[i][j]] += 1;
+    for (i = 0; i < exposures.size(); i++)
+        for (j = 0; j < exposures[i].cards.size(); j++)
+            if (exposures[i].cards[j] >= 120)
+                cardmap[30 + exposures[i].cards[j] % 10] += 1;
+            else
+                cardmap[exposures[i].cards[j] % 30] += 1;
+    j = 0;
+    for (i = 0; i < 10; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    for (i = 10; i < 20; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    for (i = 20; i < 30; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    for (i = 30; i < 37; i++)
+        if (cardmap[i] != 0) {
+            j += 1;
+            break;
+        }
+    if (j == 1) return true;
+    return false;
+}
+
+bool YakuJudge::daisangenJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int count = 0, i;
+    for (i = 2; i < hand_divided[0][0] + 2; i++) {
+        if (hand_divided[i][0] >= 34)
+            count += 1;
+    }
+    for (auto exposure : exposures) {
+        if (exposure.cards[0] >= 164)
+            count += 1;
+    }
+    return count == 3;
+}
+
+bool YakuJudge::suankoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures, uint8_t _card, int card_from) {
+    int count = 0, i;
+    _card = (_card >= 120) ? (30 + _card % 10) : (_card % 30);
+    for (i = 2; i < 2 + hand_divided[0][0]; i++) {
+        if ((card_from == 0) || (hand_divided[i][0] != _card))
+            count += 1;
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards.size() == 4) && (exposures[i].card_from == 0))
+            count += 1;
+    }
+    return count == 4;
+}
+
+bool YakuJudge::suankotankiJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures, uint8_t _card) {
+    int count = 0, i;
+    _card = (_card >= 120) ? (30 + _card % 10) : (_card % 30);
+    if (_card != hand_divided[1][0])
+        return false;
+    for (i = 2; i < 2 + hand_divided[0][0]; i++)
+        count += 1;
+    for (i = 0; i < exposures.size(); i++) {
+        if ((exposures[i].cards.size() == 4) && (exposures[i].card_from == 0))
+            count += 1;
+    }
+    return count == 4;
+}
+
+bool YakuJudge::tsuisouJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i;
+    for (i = 1; i < hand_divided.size(); i++) {
+        if (hand_divided[i][0] < 30)
+            return false;
+    }
+    for (i = 1; i < exposures.size(); i++) {
+        if (exposures[i].cards[0] < 120)
+            return false;
+    }
+    return true;
+}
+
+bool YakuJudge::ryuisoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int i, j;
+    uint8_t tmp;
+    for (i = 1; i < hand_divided.size(); i++) {
+        for (j = 0; j < hand_divided[i].size(); j++) {
+            if ((hand_divided[i][j] != 22) && (hand_divided[i][j] != 23) && (hand_divided[i][j] != 24)
+                && (hand_divided[i][j] != 26) && (hand_divided[i][j] != 28) && (hand_divided[i][j] != 35))
+                return false;
+        }
+    }
+    for (i = 0; i < exposures.size(); i++) {
+        for (j = 0; j < exposures[i].cards.size(); j++) {
+            tmp = (exposures[i].cards[j] >= 120) ? (30 + exposures[i].cards[j] % 10) : (exposures[i].cards[j] % 30);
+            if ((tmp != 22) && (tmp != 23) && (tmp != 24) && (tmp != 26) && (tmp != 28) && (tmp != 35))
+                return false;
+        }
+    }
+    return true;
+}
+
+bool YakuJudge::chinrotoJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int count = hand_divided[0][0], i;
+    for (i = 0; i < exposures.size(); i++) {
+        if (exposures[i].type == 0)
+            count += 1;
+    }
+    if (count != 4)
+        return false;
+    for (i = 1; i < hand_divided.size(); i++) {
+        if ((hand_divided[i][0] >= 30) || ((hand_divided[i][0] % 10 != 1) && (hand_divided[i][0] % 10 != 9)))
+            return false;
+    }
+    for (auto exposure : exposures) {
+        if ((exposure.cards[0] >= 120) || ((exposure.cards[0] % 10 != 1) && (exposure.cards[0] % 10 != 9)))
+            return false;
+    }
+    return true;
+}
+
+bool YakuJudge::sukantsuJudge(std::vector<Exposure> & exposures) {
+    int count = 0, i;
+    for (i = 0; i < exposures.size(); i++) {
+        if (exposures[i].cards.size() == 4)
+            count += 1;
+    }
+    return count == 4;
+}
+
+bool YakuJudge::tyurenpotoJudge(std::vector<std::vector<uint8_t>> hand_divided) {
+    int cardmap[30]{0}, i, j;
+    bool sign;
+    for (i = 1; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size(); j++)
+            if (hand_divided[i][j] < 30)
+                cardmap[hand_divided[i][j]] += 1;
+    if ((cardmap[1] >= 3) && (cardmap[9] >= 3)) {
+        bool sign = 1;
+        for (i = 2; i < 9; i++)
+            if (cardmap[i] == 0) {
+                sign = false;
+                break;
+            }
+        if (sign) return true;
+    }
+    if ((cardmap[11] >= 3) && (cardmap[19] >= 3)) {
+        bool sign = 1;
+        for (i = 12; i < 19; i++)
+            if (cardmap[i] == 0) {
+                sign = false;
+                break;
+            }
+        if (sign) return true;
+    }
+    if ((cardmap[21] >= 3) && (cardmap[29] >= 3)) {
+        bool sign = 1;
+        for (i = 22; i < 29; i++)
+            if (cardmap[i] == 0) {
+                sign = false;
+                break;
+            }
+        if (sign) return true;
+    }
+    return false;
+}
+
+bool YakuJudge::tyunrenkyuuJudge(std::vector<std::vector<uint8_t>> hand_divided, uint8_t _card) {
+    if (_card >= 120) return false;
+    _card = (_card >= 120) ? (30 + _card % 10) : (_card % 30);
+    int cardmap[30]{0}, i, j, r = _card / 10;
+    bool sign;
+    for (i = 1; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size(); j++)
+            if (hand_divided[i][j] < 30)
+                cardmap[hand_divided[i][j]] += 1;
+    cardmap[_card] -= 1;
+    if ((cardmap[r * 10 + 1] == 3) && (cardmap[r * 10 + 9] == 3)) {
+        bool sign = 1;
+        for (i = r * 10 + 2; i < r * 10 + 9; i++)
+            if (cardmap[i] != 1) {
+                sign = false;
+                break;
+            }
+        if (sign) return true;
+    }
+    return false;
+}
+
+bool YakuJudge::syosushiJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int cardmap[4]{0}, i, j, count = 0;
+    if ((hand_divided[1][0] < 30) || (hand_divided[1][0] > 33))
+        return false;
+    for (i = 2; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size();j++)
+            if ((hand_divided[i][j] >= 30) && (hand_divided[i][j] <= 33))
+                cardmap[hand_divided[i][j] - 30] += 1;
+    for (i = 0; i < exposures.size(); i++)
+        for (j = 0; j < exposures[i].cards.size(); j++)
+            if ((exposures[i].cards[j] >= 120) && (exposures[i].cards[j] < 160))
+                cardmap[exposures[i].cards[j] % 10] += 1;
+    for (i = 0; i < 4; i++)
+        if (cardmap[i] >= 3)
+            count += 1;
+    return count == 3;
+}
+
+bool YakuJudge::daisushiJudge(std::vector<std::vector<uint8_t>> hand_divided, std::vector<Exposure> & exposures) {
+    int cardmap[4]{0}, i, j, count = 0;
+    for (i = 2; i < hand_divided.size(); i++)
+        for (j = 0; j < hand_divided[i].size();j++)
+            if ((hand_divided[i][j] >= 30) && (hand_divided[i][j] <= 33))
+                cardmap[hand_divided[i][j] - 30] += 1;
+    for (i = 0; i < exposures.size(); i++)
+        for (j = 0; j < exposures[i].cards.size(); j++)
+            if ((exposures[i].cards[j] >= 120) && (exposures[i].cards[j] < 160))
+                cardmap[exposures[i].cards[j] % 10] += 1;
+    for (i = 0; i < 4; i++)
+        if (cardmap[i] >= 3)
+            count += 1;
+    return count == 4;
+}
