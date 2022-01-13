@@ -38,8 +38,8 @@ const int RYANPEKO = 27;            //两杯口
 const int HONITSU = 28;             //混一色
 const int CHINITSU = 29;            //清一色
 
-const int TENHOO = 32;              //天和
-const int CHIIHOO = 33;             //地和
+const int TENHOU = 32;              //天和
+const int CHIHOU = 33;             //地和
 const int DAISANGEN = 34;           //大三元
 const int SUANKO = 35;              //四暗刻
 const int TSUISOU = 36;             //字一色
