@@ -1,12 +1,10 @@
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-#                    configuration for clang-format 13.0                      #
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
  Language                                       : Cpp
  Standard                                       : Auto
  ColumnLimit                                    : 0
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
  AccessModifierOffset                           : -4
- AlignAfterOpenBracket                          : Align
+ AlignAfterOpenBracket                          : BlockIndent
  AlignArrayOfStructures                         : Left
  AlignConsecutiveAssignments                    : Consecutive
  AlignConsecutiveBitFields                      : Consecutive
@@ -31,8 +29,27 @@
  BinPackArguments                               : false
  BinPackParameters                              : false
  BitFieldColonSpacing                           : After
+ BraceWrapping                                  :
+     AfterCaseLabel                             : false
+     AfterClass                                 : true
+     AfterControlStatement                      : Never
+     AfterEnum                                  : true
+     AfterExternBlock                           : true
+     AfterFunction                              : true
+     AfterNamespace                             : true
+     AfterStruct                                : true
+     AfterUnion                                 : true
+     BeforeCatch                                : false
+     BeforeElse                                 : false
+     BeforeLambdaBody                           : false
+     BeforeWhile                                : false
+     IndentBraces                               : false
+     SplitEmptyFunction                         : true
+     SplitEmptyRecord                           : true
+     SplitEmptyNamespace                        : true
  BreakBeforeBinaryOperators                     : All
- BreakBeforeBraces                              : WebKit
+ BreakBeforeBraces                              : Custom
+ BreakBeforeConceptDeclarations                 : Always
  BreakBeforeTernaryOperators                    : false
  BreakConstructorInitializers                   : AfterColon
  BreakInheritanceList                           : AfterColon
@@ -51,17 +68,23 @@
  IndentExternBlock                              : Indent
  IndentGotoLabels                               : true
  IndentPPDirectives                             : BeforeHash
+ IndentRequiresClause                           : false
  IndentWidth                                    : 4
  IndentWrappedFunctionNames                     : false
+ InsertBraces                                   : true
  InsertTrailingCommas                           : None
  KeepEmptyLinesAtTheStartOfBlocks               : false
  LambdaBodyIndentation                          : Signature
  MaxEmptyLinesToKeep                            : 1
  NamespaceIndentation                           : All
+ PackConstructorInitializers                    : NextLine
  PPIndentWidth                                  : 4
  PointerAlignment                               : Right
  ReferenceAlignment                             : Right
  ReflowComments                                 : false
+ RemoveBracesLLVM                               : false
+ RequiresClausePosition                         : OwnLine
+ SeparateDefinitionBlocks                       : Always
  ShortNamespaceLines                            : 0
  SortIncludes                                   : Never
  SortUsingDeclarations                          : true

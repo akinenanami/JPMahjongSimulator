@@ -1,7 +1,12 @@
-root = true
+root = true                         # top-most EditorConfig file
 
 [*]
-charset = utf-8
+
+charset = utf-8                     # use UTF-8 by default
 
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[*.{c,cpp,h,hpp}]
+
+charset = utf-8-bom                 # BOM is well-supported in Visual Studio IDE

@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by tyl on 2021/12/29.
 //
 
@@ -8,7 +8,8 @@
 #include "CommonHeaders.h"
 #include "PlayerResources.h"
 
-class Round {
+class Round
+{
 public:
     std::queue<PlayResource *> player_turn_queue;
 

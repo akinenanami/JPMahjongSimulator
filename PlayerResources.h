@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by tyl on 2021/12/29.
 //
 
@@ -7,7 +7,8 @@
 
 #include "CommonHeaders.h"
 
-class PlayResource {
+class PlayResource
+{
 public:
     std::vector<Exposure>       exposures;         //副露
     std::unordered_set<uint8_t> discards_river;    //牌河
@@ -25,13 +26,16 @@ private:
     std::vector<uint8_t> hand;    //手牌
 };
 
-class Bot: PlayResource {
+class Bot: PlayResource
+{
 };
 
-class Player: PlayResource {
+class Player: PlayResource
+{
 };
 
-class Board {
+class Board
+{
 public:
     std::vector<uint8_t> dorasigns;        //所有宝牌指示牌
     uint8_t              chanfon;          //场风
